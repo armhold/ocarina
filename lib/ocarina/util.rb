@@ -10,34 +10,6 @@ module Ocarina
 
   module Util
 
-    def output(image, pixel_number)
-      col = pixel_number_to_col(pixel_number, image)
-      row = pixel_number_to_row(pixel_number, image)
-
-      pixel = image.pixel_color(col, row)
-
-      pixel_to_bit(pixel)
-    end
-
-    def image_to_binary_string(image)
-      num_pixels = image.rows * image.columns
-
-      result = ""
-
-      num_pixels.times do |n|
-        col = pixel_number_to_col(n, image)
-        row = pixel_number_to_row(n, image)
-        pixel = image.pixel_color(col, row)
-        result << pixel_to_bit(pixel)
-      end
-
-      result
-    end
-
-    def image_to_binary_array(image)
-      image_to_binary_string(image).split //
-    end
-
     def int_to_binary_string(i)
       i.to_s(2).rjust(NUM_OUTPUTS, '0')
     end
@@ -99,13 +71,13 @@ module Ocarina
       is_lower?(c) ? "#{IMAGES_DIR}/noise/#{c}_lower.#{suffix}" : "#{IMAGES_DIR}/noise/#{c}.#{suffix}"
     end
 
-    # is there really no standard way to do this in Ruby?
+    # kind of sad that this is not built into Ruby
     def is_lower?(c)
-      c >= 'a' && c <= 'z'
+      !! /[[:lower:]]/.match(c)
     end
 
     def is_upper?(c)
-      !is_lower(c)
+      !! /[[:upper:]]/.match(c)
     end
 
   end

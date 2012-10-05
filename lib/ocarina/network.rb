@@ -41,9 +41,10 @@ module Ocarina
       puts "total_output_weights: #{total_output_weights}"
     end
 
-    # attempt to recognize the character displayed on the given image
+    # Attempt to recognize the character displayed on the given image.
+    # image should be an instance of Magick::Image.
     #
-    # returns the integer ASCII code for the recognized character
+    # Returns the integer ASCII code for the recognized character.
     #
     def recognize(image)
       # quantize to two-color
@@ -61,6 +62,10 @@ module Ocarina
       binary_string.to_i(2)
     end
 
+    # Train the network on the image, using target_char as the expected result.
+    #
+    # image should be an instance of Magick::Image.
+    #
     def train(image, target_char)
       # quantize to two-color
       image = image.quantize(2, Magick::GRAYColorspace)
@@ -81,17 +86,23 @@ module Ocarina
       adjust_input_weights
     end
 
+    # persist the network
+    #
     def save_network_to_file(filepath)
       File.open(filepath,'w') do|file|
         Marshal.dump(self, file)
       end
     end
 
+    # load a previously-trained network
+    #
     def self.load_network_from_file(filepath)
       File.open(filepath) do |file|
         Marshal.load(file)
       end
     end
+
+    private
 
     def assign_inputs(image)
 
@@ -239,35 +250,6 @@ module Ocarina
 
     def result_as_binary_string
       @output_values.inject("") { |accum, val| "#{accum}#{val.round}" }
-    end
-
-    def output(image, pixel_number)
-      col = pixel_number_to_col(pixel_number, image)
-      row = pixel_number_to_row(pixel_number, image)
-
-      pixel = image.pixel_color(col, row)
-
-      pixel_to_bit(pixel)
-    end
-
-    def inputs_as_text(num_cols)
-
-      rows = []
-      i = 0
-      line = ""
-      @input_values.each do |bit|
-
-        line << "#{bit}"
-        i += 1
-        if i == num_cols
-          rows << line
-          line = ""
-          i = 0
-        end
-
-      end
-
-      rows.inject { |accum, row| "#{accum}\n#{row}" }
     end
 
   end

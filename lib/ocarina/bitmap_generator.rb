@@ -7,11 +7,6 @@ module Ocarina
   class BitmapGenerator
     include Ocarina::Util
 
-    def initialize
-
-    end
-
-
     # draws the image, but does not save it
     #
     def draw_image_for_char(char)
@@ -51,6 +46,5 @@ module Ocarina
     end
 
   end
-
 
 end

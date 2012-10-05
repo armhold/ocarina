@@ -40,21 +40,6 @@ On OSX at least, ImageMagick requires X11 and ghostscript. You'll likely need to
 1. `$ brew install ghostscript`
 
 
-### Gem Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'ocarina'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install ocarina
-
-
 ## Usage
 
 #### Training
