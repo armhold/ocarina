@@ -56,24 +56,33 @@ namespace :ocarina do
 
 
     puts "##### testing against reference images #####"
+    stats = Ocarina::ErrorStats.new
 
     INPUT_SET.each do |letter|
       result = network.recognize reference_image_for_char(letter)
       target_binary_string = network.char_to_binary_string letter
 
+      stats.check_error letter.ord, result
+
       puts "expected: #{target_binary_string}, decimal: #{letter.ord}"
       puts "actual  : #{int_to_binary_string result}, decimal: #{result}"
     end
+    stats.report
 
     puts "##### testing against noise images #####"
+
+    stats = Ocarina::ErrorStats.new
 
     INPUT_SET.each do |letter|
       result = network.recognize noise_image_for_char(letter)
       target_binary_string = network.char_to_binary_string letter
 
+      stats.check_error letter.ord, result
+
       puts "expected: #{target_binary_string}, decimal: #{letter.ord}"
       puts "actual  : #{int_to_binary_string result}, decimal: #{result}"
     end
+    stats.report
 
   end
 
