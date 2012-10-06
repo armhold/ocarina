@@ -63,12 +63,10 @@ namespace :ocarina do
       target_binary_string = network.char_to_binary_string letter
 
       stats.check_error letter.ord, result
-
-      puts "expected: #{target_binary_string}, decimal: #{letter.ord}"
-      puts "actual  : #{int_to_binary_string result}, decimal: #{result}"
     end
     stats.report
 
+    puts
     puts "##### testing against noise images #####"
 
     stats = Ocarina::ErrorStats.new
@@ -78,9 +76,6 @@ namespace :ocarina do
       target_binary_string = network.char_to_binary_string letter
 
       stats.check_error letter.ord, result
-
-      puts "expected: #{target_binary_string}, decimal: #{letter.ord}"
-      puts "actual  : #{int_to_binary_string result}, decimal: #{result}"
     end
     stats.report
 

@@ -26,6 +26,9 @@ module Ocarina
         actual_binary_string   = int_to_binary_string actual
 
         @bits_wrong += count_differences expected_binary_string, actual_binary_string
+
+        #puts "expected: #{expected_binary_string}, decimal: #{expected}"
+        #puts "actual  : #{actual_binary_string}, decimal: #{actual}"
       end
 
     end
