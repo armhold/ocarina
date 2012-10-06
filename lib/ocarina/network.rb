@@ -203,12 +203,16 @@ module Ocarina
 
         #puts "expected: #{expected}"
         #puts "output: #{@output_values[output]}"
+        #puts "error: #{'%.10f' % error}"
         accum_error += error ** 2
         @output_errors[output] = error
       end
 
+      # TODO: @current_error only represents the error from the last trained character.
+      # We should keep a running average for the current set of characters for each training "run".
+      #
       @current_error = Math.sqrt(accum_error)
-      #puts "@current_error: #{@current_error}"
+      #puts "@current_error: #{'%.10f' %  @current_error}"
     end
 
     def calculate_hidden_errors

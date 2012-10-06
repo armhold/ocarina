@@ -1,7 +1,7 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
 require_relative "lib/ocarina.rb"
-require 'progress_bar'
+require 'powerbar'
 
 namespace :ocarina do
   include Ocarina::Util
@@ -29,13 +29,14 @@ namespace :ocarina do
     network = Ocarina::Network.new(Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT)
 
     training_iterations = 100
+    pbar = PowerBar.new
+    pbar.settings.tty.finite.template.barchar = '#'
+    pbar.settings.tty.finite.template.padchar = '-'
 
-    pbar = ProgressBar.new(training_iterations * INPUT_SET.count)
-
-    training_iterations.times do
+    training_iterations.times do |i|
       INPUT_SET.each do |letter|
         network.train reference_image_for_char(letter), letter
-        pbar.increment!
+        pbar.show(msg: "current error: #{'%.10f' % network.current_error}", done: i + 1, total: training_iterations)
       end
     end
 

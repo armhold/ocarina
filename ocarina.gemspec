@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = Ocarina::VERSION
 
   gem.add_runtime_dependency 'rmagick'
-  gem.add_runtime_dependency 'progress_bar'
+  gem.add_runtime_dependency 'powerbar'
 end
