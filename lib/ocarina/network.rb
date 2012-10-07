@@ -2,8 +2,6 @@ require_relative 'util'
 
 module Ocarina
 
-  CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-
   # a network of neurons
   #
   class Network
@@ -55,6 +53,8 @@ module Ocarina
 
       calculate_hidden_outputs
       calculate_final_outputs
+
+      #@output_values.each.with_index { |v, i| puts "index: #{i} => #{v}" }
 
       # process results
       #

@@ -6,9 +6,6 @@ require 'powerbar'
 namespace :ocarina do
   include Ocarina::Util
 
-  #INPUT_SET = Ocarina::CHARS.split(//).shuffle
-  INPUT_SET = "ABCDEFGHIJKLMNOPQ".split(//).shuffle
-
   desc "creates bitmaps to be used for training data"
   task :bitmaps do |t, args|
 
@@ -34,7 +31,7 @@ namespace :ocarina do
     pbar.settings.tty.finite.template.padchar = '-'
 
     training_iterations.times do |i|
-      INPUT_SET.each do |letter|
+      Ocarina::INPUT_SET.each do |letter|
         network.train reference_image_for_char(letter), letter
         pbar.show(msg: "current error: #{'%.10f' % network.current_error}", done: i + 1, total: training_iterations)
       end
@@ -59,10 +56,8 @@ namespace :ocarina do
     puts "##### testing against reference images #####"
     stats = Ocarina::ErrorStats.new
 
-    INPUT_SET.each do |letter|
+    Ocarina::INPUT_SET.each do |letter|
       result = network.recognize reference_image_for_char(letter)
-      target_binary_string = network.char_to_binary_string letter
-
       stats.check_error letter.ord, result
     end
     stats.report
@@ -72,10 +67,8 @@ namespace :ocarina do
 
     stats = Ocarina::ErrorStats.new
 
-    INPUT_SET.each do |letter|
+    Ocarina::INPUT_SET.each do |letter|
       result = network.recognize noise_image_for_char(letter)
-      target_binary_string = network.char_to_binary_string letter
-
       stats.check_error letter.ord, result
     end
     stats.report
