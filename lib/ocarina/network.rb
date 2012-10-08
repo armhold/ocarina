@@ -252,10 +252,6 @@ module Ocarina
       @output_values.map { |output| output.round.to_i }
     end
 
-    def result_as_binary_string
-      @output_values.inject("") { |accum, val| "#{accum}#{val.round}" }
-    end
-
   end
 
 end
