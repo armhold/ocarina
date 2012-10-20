@@ -3,9 +3,10 @@ require 'RMagick'
 module Ocarina
 
   CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-  INPUT_SET = CHARS.split(//).shuffle
-  #INPUT_SET = "ABCDEFGHIJKLMNOPQ".split(//).shuffle
-
+  #INPUT_SET = CHARS.split(//).shuffle
+  # network has trouble when input set grows beyond 15-18 chars
+  # for now, just use a subset
+  INPUT_SET = CHARS[0..15].split(//).shuffle
 
   NUM_OUTPUTS  = 8 # need 8 bits to represent 0..255 in binary
   IMAGE_WIDTH  = 16
