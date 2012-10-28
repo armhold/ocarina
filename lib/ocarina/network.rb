@@ -10,33 +10,22 @@ module Ocarina
 
     attr_accessor :current_error
 
-    def initialize(num_inputs)
+    # config is a list of ints that defines the layers of the network
+    #
+    # e.g. config = [ 10, 20, 20, 20, 5 ]
+    #
+    # defines a network with 10 inputs, three hidden layers with 20 neurons each, and
+    # final output layer of 5 neurons.
+    #
+    def initialize(config)
 
-      @num_inputs     = num_inputs # total of bits in the image
+      @layers = []
 
-      #@hidden_count   = (1.5 * num_inputs).to_i  # somewhat arbitrary
-      @hidden_count   = 15
+      config.each_with_index do |num_neurons, i|
+        num_neurons_next_layer = config[i + 1] || 0
+        @layers << Layer.new(num_neurons, num_neurons_next_layer)
+      end
 
-      @input_values   = []   # image bits
-      @input_weights  = []   # weights from inputs -> hidden nodes
-
-      @hidden_outputs = []   # after feed-forward, what the hidden nodes output
-
-      @output_weights = []   # weights from hidden nodes -> output nodes
-      @output_values  = []   # after feed-forward, what the output nodes output
-
-      @output_errors  = []
-      @hidden_errors  = []
-
-      assign_random_weights
-
-      #puts "@input_weights: #{@input_weights}"
-
-      total_input_weights = @input_weights.map { |array| array.reduce(:+) }.reduce(:+)
-      puts "total_input_weights: #{total_input_weights}"
-
-      total_output_weights = @output_weights.map { |array| array.reduce(:+) }.reduce(:+)
-      puts "total_output_weights: #{total_output_weights}"
     end
 
     # Attempt to recognize the character displayed on the given image.
@@ -250,6 +239,10 @@ module Ocarina
     #
     def quantized_result
       @output_values.map { |output| output.round.to_i }
+    end
+
+    def to_s
+      @layers.join ","
     end
 
   end

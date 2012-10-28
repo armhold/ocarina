@@ -16,13 +16,7 @@ module Ocarina
       @errors  = [ ]
       @weights = [ ]   # outgoing weights
 
-      @num_neurons.times do |me|
-        @weights[me] = [ ]
-
-        num_neurons_next_layer.times do |neighbor|
-          @weights[me][neighbor] = rand(0.8..0.9) / (@num_neurons * num_neurons_next_layer)
-        end
-      end
+      randomize_weights num_neurons_next_layer
     end
 
     # calculate my outputs based on outputs * weights of previous layer
@@ -52,14 +46,31 @@ module Ocarina
           sum += layer_to_right.errors[neighbor] * @weights[me][neighbor]
         end
 
-        @errors[me] = sum
+        @error[me] = @outputs[me] * (1.0 - @outputs[me]) * sum
       end
+
     end
 
     def adjust_weights(layer_to_right)
       @num_neurons.times do |me|
         layer_to_right.num_neurons.times do |neighbor|
           @weights[me][neighbor] += (@outputs[me] * layer_to_right.errors[neighbor])
+        end
+      end
+    end
+
+    def to_s
+      "num_neurons: #{@num_neurons}, weights: #{@weights}"
+    end
+
+    private
+
+    def randomize_weights(num_neurons_next_layer)
+      @num_neurons.times do |me|
+        @weights[me] = [ ]
+
+        num_neurons_next_layer.times do |neighbor|
+          @weights[me][neighbor] = rand(0.8..0.9) / (@num_neurons * num_neurons_next_layer)
         end
       end
     end

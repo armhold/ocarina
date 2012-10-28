@@ -23,7 +23,8 @@ namespace :ocarina do
 
   desc "builds and trains the network"
   task :train do |t, args|
-    network = Ocarina::Network.new(Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT)
+    network = Ocarina::Network.new([Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT, 5, 5, 3])
+    puts network
 
     training_iterations = 100
     pbar = PowerBar.new
