@@ -84,8 +84,10 @@ module Ocarina
       board = Magick::Image.read(input_file).first
 
       cropper = LetterpressCropper.new
-      tiles = cropper.crop board, character_map
-      tiles.each { |char, tile| tile.write(filename_for_training_image(char, 'gif')) }
+      tile_rows = cropper.crop board
+      tile_rows.zip(character_map) do |tile_row, char_row|
+        tile_row.zip(char_row) { |tile, char| tile.write(filename_for_training_image(char, 'gif')) }
+      end
     end
 
   end
