@@ -82,7 +82,6 @@ namespace :ocarina do
       stats.check_error letter.ord, result
     end
     stats.report
-
   end
 
 end

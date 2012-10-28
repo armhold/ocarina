@@ -82,39 +82,10 @@ module Ocarina
 
     def write_letterpress_tiles(input_file, character_map)
       board = Magick::Image.read(input_file).first
-      board = quantize_image(board)
 
-      y_offset = LETTERPRESS_HEIGHT_OFFSET
-
-      tiles = []
-
-      border = 1
-
-      0.upto(LETTERPRESS_TILES_ACROSS - 1) do |x|
-        tiles[x] = []
-
-        x_offset = 0
-
-        0.upto(LETTERPRESS_TILES_ACROSS - 1) do |y|
-
-          tiles[x][y] = board.crop(x_offset - border, y_offset + border, LETTERPRESS_TILE_PIXELS - border, LETTERPRESS_TILE_PIXELS - border, true)
-          box = tiles[x][y].bounding_box
-          min_bound_width = 0.75 * IMAGE_WIDTH
-          #puts "char: #{character_map[x][y]}, box width: #{box.width}"
-          if box.width > min_bound_width
-            tiles[x][y] = tiles[x][y].crop(box.x - border, box.y - border, box.width + 2 * border, box.height + 2 * border, true)
-          end
-
-          tiles[x][y].resize!(IMAGE_WIDTH, IMAGE_HEIGHT)
-          tiles[x][y].write(filename_for_training_image(character_map[x][y], 'gif'))
-
-          x_offset += LETTERPRESS_TILE_PIXELS
-
-        end
-
-        y_offset += LETTERPRESS_TILE_PIXELS
-      end
-
+      cropper = LetterpressCropper.new
+      tiles = cropper.crop board, character_map
+      tiles.each { |char, tile| tile.write(filename_for_training_image(char, 'gif')) }
     end
 
   end
