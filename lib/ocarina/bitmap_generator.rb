@@ -88,6 +88,8 @@ module Ocarina
 
       tiles = []
 
+      border = 1
+
       0.upto(LETTERPRESS_TILES_ACROSS - 1) do |x|
         tiles[x] = []
 
@@ -95,9 +97,14 @@ module Ocarina
 
         0.upto(LETTERPRESS_TILES_ACROSS - 1) do |y|
 
-          tiles[x][y] = board.crop(x_offset, y_offset, LETTERPRESS_TILE_PIXELS, LETTERPRESS_TILE_PIXELS, true)
-          #box = tiles[x][y].bounding_box
-          #tiles[x][y] = tiles[x][y].crop(box.x, box.y, box.width, box.height)
+          tiles[x][y] = board.crop(x_offset - border, y_offset + border, LETTERPRESS_TILE_PIXELS - border, LETTERPRESS_TILE_PIXELS - border, true)
+          box = tiles[x][y].bounding_box
+          min_bound_width = 0.75 * IMAGE_WIDTH
+          #puts "char: #{character_map[x][y]}, box width: #{box.width}"
+          if box.width > min_bound_width
+            tiles[x][y] = tiles[x][y].crop(box.x - border, box.y - border, box.width + 2 * border, box.height + 2 * border, true)
+          end
+
           tiles[x][y].resize!(IMAGE_WIDTH, IMAGE_HEIGHT)
           tiles[x][y].write(filename_for_training_image(character_map[x][y], 'gif'))
 

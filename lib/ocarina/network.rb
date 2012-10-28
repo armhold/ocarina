@@ -15,7 +15,7 @@ module Ocarina
       @num_inputs     = num_inputs # total of bits in the image
 
       #@hidden_count   = (1.5 * num_inputs).to_i  # somewhat arbitrary
-      @hidden_count   = 15
+      @hidden_count   = 20
 
       @input_values   = []   # image bits
       @input_weights  = []   # weights from inputs -> hidden nodes
