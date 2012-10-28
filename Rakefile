@@ -21,6 +21,12 @@ namespace :ocarina do
 
   end
 
+  desc "creates bitmaps to be used for training data from Letterpress board tiles"
+  task :letterpress do |t, args|
+    generator = Ocarina::BitmapGenerator.new
+    generator.generate_from_letterpress_images
+  end
+
   desc "builds and trains the network"
   task :train do |t, args|
     network = Ocarina::Network.new(Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT)

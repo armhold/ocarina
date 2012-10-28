@@ -2,17 +2,22 @@ require 'RMagick'
 
 module Ocarina
 
-  CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-  #INPUT_SET = CHARS.split(//).shuffle
+  CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  INPUT_SET = CHARS.split(//).shuffle
   # network has trouble when input set grows beyond 15-18 chars
   # for now, just use a subset
-  INPUT_SET = CHARS[0..15].split(//).shuffle
+  #INPUT_SET = CHARS[0..15].split(//).shuffle
 
   NUM_OUTPUTS  = 8 # need 8 bits to represent 0..255 in binary
   IMAGE_WIDTH  = 16
   IMAGE_HEIGHT = 16
   DATA_DIR     = "#{File.dirname(__FILE__)}/../../data"
   IMAGES_DIR   = "#{DATA_DIR}/images"
+
+  LETTERPRESS_TILES_ACROSS = 5
+  LETTERPRESS_TILES_DOWN   = 5
+  LETTERPRESS_TILE_PIXELS  = 128
+  LETTERPRESS_HEIGHT_OFFSET = 496
 
   module Util
 

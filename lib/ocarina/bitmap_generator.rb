@@ -45,6 +45,35 @@ module Ocarina
       image.write(filename_for_noise_image(char, 'gif'))
     end
 
+    # generate reference images from letterpress game boards
+    #
+    def generate_from_letterpress_images
+      board = Magick::Image.read("#{IMAGES_DIR}/letterpress/board1.png").first
+
+      y_offset = LETTERPRESS_HEIGHT_OFFSET
+
+      tiles = []
+
+      0.upto(LETTERPRESS_TILES_ACROSS - 1) do |x|
+        tiles[x] = []
+
+        x_offset = 0
+
+        0.upto(LETTERPRESS_TILES_ACROSS - 1) do |y|
+
+          tiles[x][y] = board.crop(x_offset, y_offset, LETTERPRESS_TILE_PIXELS - 1, LETTERPRESS_TILE_PIXELS - 1)
+          tiles[x][y].write("#{IMAGES_DIR}/letterpress/letter_#{x}-#{y}.png")
+
+          x_offset += LETTERPRESS_TILE_PIXELS
+
+        end
+
+        y_offset += LETTERPRESS_TILE_PIXELS
+      end
+    end
+
+
+
   end
 
 end
