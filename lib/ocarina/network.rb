@@ -46,7 +46,7 @@ module Ocarina
     #
     def recognize(image)
       # quantize to two-color
-      image = image.quantize(2, Magick::GRAYColorspace)
+      image = quantize_image(image)
 
       # the binary string we expect to see from the output nodes
       assign_inputs image
@@ -68,7 +68,8 @@ module Ocarina
     #
     def train(image, target_char)
       # quantize to two-color
-      image = image.quantize(2, Magick::GRAYColorspace)
+      image = quantize_image(image)
+      image.write(filename_for_quantized_image(target_char, 'gif'))
 
       # the binary string we expect to see from the output nodes
       @target_binary_string = char_to_binary_string(target_char)

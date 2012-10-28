@@ -37,7 +37,7 @@ module Ocarina
     # generate the gif image for the given character, but with added noise
     #
     def generate_noise_gif_for_char(char)
-      image = draw_image_for_char char
+      image = Magick::Image.read(filename_for_training_image(char, 'gif')).first
       #image = image.wave(10, 100)
       image = image.add_noise(Magick::PoissonNoise)
       #image = image.rotate(5)
@@ -48,7 +48,41 @@ module Ocarina
     # generate reference images from letterpress game boards
     #
     def generate_from_letterpress_images
-      board = Magick::Image.read("#{IMAGES_DIR}/letterpress/board1.png").first
+
+      # board games were generated randomly by the game.
+      # with these three game boards, we have the letters A-Z.
+
+      write_letterpress_tiles("#{IMAGES_DIR}/letterpress/board1.png",
+                              [
+                                  [ 'P', 'R', 'B', 'R', 'Z' ],
+                                  [ 'T', 'A', 'V', 'Z', 'R' ],
+                                  [ 'B', 'D', 'A', 'K', 'Y' ],
+                                  [ 'G', 'I', 'G', 'K', 'F' ],
+                                  [ 'R', 'Y', 'S', 'J', 'V' ]
+                              ])
+
+      write_letterpress_tiles("#{IMAGES_DIR}/letterpress/board2.png",
+                              [
+                                  [ 'Q', 'D', 'F', 'P', 'M' ],
+                                  [ 'N', 'E', 'E', 'S', 'I' ],
+                                  [ 'A', 'W', 'F', 'M', 'L' ],
+                                  [ 'F', 'R', 'P', 'T', 'T' ],
+                                  [ 'K', 'C', 'S', 'S', 'Y' ]
+                              ])
+
+      write_letterpress_tiles("#{IMAGES_DIR}/letterpress/board3.png",
+                              [
+                                  [ 'L', 'H', 'F', 'L', 'M' ],
+                                  [ 'R', 'V', 'P', 'U', 'K' ],
+                                  [ 'V', 'O', 'E', 'E', 'X' ],
+                                  [ 'I', 'N', 'R', 'I', 'T' ],
+                                  [ 'V', 'N', 'S', 'I', 'Q' ]
+                              ])
+    end
+
+    def write_letterpress_tiles(input_file, character_map)
+      board = Magick::Image.read(input_file).first
+      board = quantize_image(board)
 
       y_offset = LETTERPRESS_HEIGHT_OFFSET
 
@@ -61,8 +95,11 @@ module Ocarina
 
         0.upto(LETTERPRESS_TILES_ACROSS - 1) do |y|
 
-          tiles[x][y] = board.crop(x_offset, y_offset, LETTERPRESS_TILE_PIXELS - 1, LETTERPRESS_TILE_PIXELS - 1)
-          tiles[x][y].write("#{IMAGES_DIR}/letterpress/letter_#{x}-#{y}.png")
+          tiles[x][y] = board.crop(x_offset, y_offset, LETTERPRESS_TILE_PIXELS, LETTERPRESS_TILE_PIXELS, true)
+          #box = tiles[x][y].bounding_box
+          #tiles[x][y] = tiles[x][y].crop(box.x, box.y, box.width, box.height)
+          tiles[x][y].resize!(IMAGE_WIDTH, IMAGE_HEIGHT)
+          tiles[x][y].write(filename_for_training_image(character_map[x][y], 'gif'))
 
           x_offset += LETTERPRESS_TILE_PIXELS
 
@@ -70,9 +107,8 @@ module Ocarina
 
         y_offset += LETTERPRESS_TILE_PIXELS
       end
+
     end
-
-
 
   end
 

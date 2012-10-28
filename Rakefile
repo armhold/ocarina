@@ -25,6 +25,10 @@ namespace :ocarina do
   task :letterpress do |t, args|
     generator = Ocarina::BitmapGenerator.new
     generator.generate_from_letterpress_images
+
+    Ocarina::CHARS.each_char do |char|
+      generator.generate_noise_gif_for_char char
+    end
   end
 
   desc "builds and trains the network"

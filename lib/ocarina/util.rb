@@ -82,6 +82,11 @@ module Ocarina
       is_lower?(c) ? "#{IMAGES_DIR}/noise/#{c}_lower.#{suffix}" : "#{IMAGES_DIR}/noise/#{c}.#{suffix}"
     end
 
+    def filename_for_quantized_image(c, suffix)
+
+      is_lower?(c) ? "#{IMAGES_DIR}/quantized/#{c}_lower.#{suffix}" : "#{IMAGES_DIR}/quantized/#{c}.#{suffix}"
+    end
+
     # kind of sad that this is not built into Ruby
     def is_lower?(c)
       !! /[[:lower:]]/.match(c)
@@ -89,6 +94,10 @@ module Ocarina
 
     def is_upper?(c)
       !! /[[:upper:]]/.match(c)
+    end
+
+    def quantize_image(image)
+      image.white_threshold(Magick::MaxRGB * 0.35).quantize(2, Magick::GRAYColorspace)
     end
 
   end
