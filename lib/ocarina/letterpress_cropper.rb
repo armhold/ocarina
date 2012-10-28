@@ -2,6 +2,13 @@ require 'RMagick'
 
 module Ocarina
 
+  LETTERPRESS_TILES_ACROSS = 5
+  LETTERPRESS_TILES_DOWN   = 5
+  LETTERPRESS_TILE_PIXELS  = 128
+  LETTERPRESS_HEIGHT_OFFSET = 496
+  LETTERPRESS_EXPECTED_WIDTH = LETTERPRESS_TILES_ACROSS * LETTERPRESS_TILE_PIXELS  
+  LETTERPRESS_EXPECTED_HEIGHT = 1136
+
   # creates tiles of character images from letterpress game boards
   #
   class LetterpressCropper
@@ -10,6 +17,10 @@ module Ocarina
     # returns an N by N array of image tiles
     #
     def crop(image)
+      if image.columns != LETTERPRESS_EXPECTED_WIDTH || image.rows != LETTERPRESS_EXPECTED_HEIGHT
+        image = image.resize(LETTERPRESS_EXPECTED_WIDTH, LETTERPRESS_EXPECTED_HEIGHT)
+      end
+
       image = quantize_image(image)
 
       y_offset = LETTERPRESS_HEIGHT_OFFSET

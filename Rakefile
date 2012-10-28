@@ -35,7 +35,7 @@ namespace :ocarina do
   task :train do |t, args|
     network = Ocarina::Network.new(Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT)
 
-    training_iterations = 100
+    training_iterations = 250
     pbar = PowerBar.new
     pbar.settings.tty.finite.template.barchar = '#'
     pbar.settings.tty.finite.template.padchar = '-'
@@ -82,6 +82,32 @@ namespace :ocarina do
       stats.check_error letter.ord, result
     end
     stats.report
+  end
+
+  desc "prints letters from a letterpress game board"
+  task :gameboard, [:board_file]  do |t, args|
+    file = "#{Ocarina::DATA_DIR}/train.bin"
+    network = Ocarina::Network.load_network_from_file file
+
+    puts "cwd: #{Dir.pwd}"
+    puts "reading letterpress board: #{args.board_file}..."
+
+    board = Magick::Image.read(args.board_file).first
+
+    cropper = Ocarina::LetterpressCropper.new
+    tile_rows = cropper.crop board
+
+    result = ""
+
+    tile_rows.each do |tile_row|
+      tile_row.each do |tile|
+        result << "\t#{network.recognize(tile).chr}"
+      end
+
+      result << "\n"
+    end
+
+    puts "result: \n#{result}"
   end
 
 end

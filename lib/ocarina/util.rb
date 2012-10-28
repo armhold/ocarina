@@ -14,11 +14,6 @@ module Ocarina
   DATA_DIR     = "#{File.dirname(__FILE__)}/../../data"
   IMAGES_DIR   = "#{DATA_DIR}/images"
 
-  LETTERPRESS_TILES_ACROSS = 5
-  LETTERPRESS_TILES_DOWN   = 5
-  LETTERPRESS_TILE_PIXELS  = 128
-  LETTERPRESS_HEIGHT_OFFSET = 496
-
   module Util
 
     def int_to_binary_string(i)
