@@ -35,7 +35,7 @@ namespace :ocarina do
   task :train do |t, args|
     network = Ocarina::Network.new(Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT)
 
-    training_iterations = 250
+    training_iterations = 350
     pbar = PowerBar.new
     pbar.settings.tty.finite.template.barchar = '#'
     pbar.settings.tty.finite.template.padchar = '-'
