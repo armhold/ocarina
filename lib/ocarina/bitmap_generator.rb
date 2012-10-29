@@ -29,6 +29,19 @@ module Ocarina
       end
     end
 
+    # save the reference and noise images to disk
+    #
+    def persist_tiles
+      reference_image_hash.each_pair do |char, image|
+        puts "saving to: #{filename_for_training_image(char, 'gif')}"
+
+        image.write(filename_for_training_image(char, 'gif'))
+      end
+
+      noise_image_hash.each_pair do |char, image|
+        image.write(filename_for_noise_image(char, 'gif'))
+      end
+    end
 
     # draws the image, but does not save it
     #
@@ -53,10 +66,7 @@ module Ocarina
     # generate the gif image for the given character
     #
     def generate_reference_gif_for_char(char)
-      image = draw_image_for_char char
-      image.write(filename_for_training_image(char, 'gif'))
-
-      image
+      draw_image_for_char char
     end
 
     # generate the gif image for the given character, but with added noise
@@ -68,7 +78,6 @@ module Ocarina
       image = image.add_noise(Magick::PoissonNoise)
       #image = image.rotate(5)
       #image = image.resize_to_fit(@config.char_width, @config.char_height)
-      image.write(filename_for_noise_image(char, 'gif'))
 
       image
     end
