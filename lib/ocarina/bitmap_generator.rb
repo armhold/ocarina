@@ -7,10 +7,15 @@ module Ocarina
   class BitmapGenerator
     include Ocarina::Util
 
+    def initialize(config)
+      @config = config
+    end
+
+
     # draws the image, but does not save it
     #
     def draw_image_for_char(char)
-      canvas       = Magick::Image.new(Ocarina::IMAGE_WIDTH, Ocarina::IMAGE_HEIGHT)
+      canvas       = Magick::Image.new(@config.char_width, @config.char_height)
       gc           = Magick::Draw.new
       gc.pointsize = 20.0
       #gc.font_family = "Helvetica"
@@ -83,7 +88,7 @@ module Ocarina
     def write_letterpress_tiles(input_file, character_map)
       board = Magick::Image.read(input_file).first
 
-      cropper = LetterpressCropper.new
+      cropper = LetterpressCropper.new(@config)
       tile_rows = cropper.crop board
       tile_rows.zip(character_map) do |tile_row, char_row|
         tile_row.zip(char_row) { |tile, char| tile.write(filename_for_training_image(char, 'gif')) }

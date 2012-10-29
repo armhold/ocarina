@@ -10,9 +10,10 @@ module Ocarina
 
     attr_accessor :current_error
 
-    def initialize(num_inputs)
+    def initialize(config)
 
-      @num_inputs     = num_inputs # total of bits in the image
+      @config         = config
+      @num_inputs     = config.num_inputs  # total of bits in the image
 
       #@hidden_count   = (1.5 * num_inputs).to_i  # somewhat arbitrary
       @hidden_count   = 25

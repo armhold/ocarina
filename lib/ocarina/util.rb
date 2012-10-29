@@ -9,8 +9,8 @@ module Ocarina
   #INPUT_SET = CHARS[0..15].split(//).shuffle
 
   NUM_OUTPUTS  = 8 # need 8 bits to represent 0..255 in binary
-  IMAGE_WIDTH  = 16
-  IMAGE_HEIGHT = 16
+  #IMAGE_WIDTH  = 16
+  #IMAGE_HEIGHT = 16
   DATA_DIR     = "#{File.dirname(__FILE__)}/../../data"
   IMAGES_DIR   = "#{DATA_DIR}/images"
 

@@ -14,6 +14,10 @@ module Ocarina
   class LetterpressCropper
     include Ocarina::Util
 
+    def initialize(config)
+      @config = config
+    end
+
     # returns an N by N array of image tiles
     #
     def crop(image)
@@ -37,12 +41,12 @@ module Ocarina
 
           tile = image.crop(x_offset - border, y_offset + border, LETTERPRESS_TILE_PIXELS - border, LETTERPRESS_TILE_PIXELS - border, true)
           box = tile.bounding_box
-          min_bound_width = 0.75 * IMAGE_WIDTH
+          min_bound_width = 0.75 * @config.char_width
           if box.width > min_bound_width
             tile = tile.crop(box.x - border, box.y - border, box.width + 2 * border, box.height + 2 * border, true)
           end
 
-          tile.resize!(IMAGE_WIDTH, IMAGE_HEIGHT)
+          tile.resize!(@config.char_width, @config.char_height)
           row << tile
           x_offset += LETTERPRESS_TILE_PIXELS
 

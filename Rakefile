@@ -9,7 +9,7 @@ namespace :ocarina do
   desc "creates bitmaps to be used for training data"
   task :bitmaps do |t, args|
 
-    generator = Ocarina::BitmapGenerator.new
+    generator = Ocarina::BitmapGenerator.new(config)
 
     Ocarina::CHARS.each_char do |char|
       generator.generate_reference_gif_for_char char
@@ -23,7 +23,7 @@ namespace :ocarina do
 
   desc "creates bitmaps to be used for training data from Letterpress board tiles"
   task :letterpress do |t, args|
-    generator = Ocarina::BitmapGenerator.new
+    generator = Ocarina::BitmapGenerator.new(config)
     generator.generate_from_letterpress_images
 
     Ocarina::CHARS.each_char do |char|
@@ -33,7 +33,7 @@ namespace :ocarina do
 
   desc "builds and trains the network"
   task :train do |t, args|
-    network = Ocarina::Network.new(Ocarina::IMAGE_WIDTH * Ocarina::IMAGE_HEIGHT)
+    network = Ocarina::Network.new(config)
 
     training_iterations = 350
     pbar = PowerBar.new
@@ -64,7 +64,7 @@ namespace :ocarina do
 
 
     puts "##### testing against reference images #####"
-    stats = Ocarina::ErrorStats.new
+    stats = Ocarina::ErrorStats.new(config)
 
     Ocarina::INPUT_SET.each do |letter|
       result = network.recognize reference_image_for_char(letter)
@@ -75,7 +75,7 @@ namespace :ocarina do
     puts
     puts "##### testing against noise images #####"
 
-    stats = Ocarina::ErrorStats.new
+    stats = Ocarina::ErrorStats.new(config)
 
     Ocarina::INPUT_SET.each do |letter|
       result = network.recognize noise_image_for_char(letter)
@@ -86,6 +86,8 @@ namespace :ocarina do
 
   desc "prints letters from a letterpress game board"
   task :gameboard, [:board_file]  do |t, args|
+
+
     file = "#{Ocarina::DATA_DIR}/train.bin"
     network = Ocarina::Network.load_network_from_file file
 
@@ -94,7 +96,7 @@ namespace :ocarina do
 
     board = Magick::Image.read(args.board_file).first
 
-    cropper = Ocarina::LetterpressCropper.new
+    cropper = Ocarina::LetterpressCropper.new(config)
     tile_rows = cropper.crop board
 
     result = ""
@@ -109,5 +111,10 @@ namespace :ocarina do
 
     puts "result: \n#{result}"
   end
+
+  def config
+    @config ||= Ocarina::Config.new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 8, 16, 16)
+  end
+
 
 end

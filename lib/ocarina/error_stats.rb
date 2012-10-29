@@ -6,7 +6,9 @@ module Ocarina
   #
   class ErrorStats
 
-    def initialize
+    def initialize(num_outputs)
+      @num_outputs = num_outputs
+
       @chars_seen  = 0
       @chars_wrong = 0
       @bits_seen   = 0
@@ -17,10 +19,11 @@ module Ocarina
     #
     def check_error(expected, actual)
       @chars_seen += 1
-      @bits_seen += NUM_OUTPUTS
+      @bits_seen += @num_outputs
 
       if expected != actual
         @chars_wrong +=1
+        puts "char wrong, expected: #{expected.chr}, guessed: #{actual.chr}"
 
         expected_binary_string = int_to_binary_string expected
         actual_binary_string   = int_to_binary_string actual

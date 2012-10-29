@@ -1,4 +1,5 @@
 require_relative 'ocarina/version'
+require_relative 'ocarina/config'
 require_relative 'ocarina/network'
 require_relative 'ocarina/util'
 require_relative 'ocarina/error_stats'
