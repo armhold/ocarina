@@ -21,18 +21,11 @@ namespace :ocarina do
 
   end
 
-  desc "creates bitmaps to be used for training data from Letterpress board tiles"
+  desc "builds and trains network using Letterpress board tiles"
   task :letterpress do |t, args|
     generator = Ocarina::BitmapGenerator.new(config)
-    generator.generate_from_letterpress_images
+    reference_image_hash = generator.generate_from_letterpress_images
 
-    Ocarina::CHARS.each_char do |char|
-      generator.generate_noise_gif_for_char char
-    end
-  end
-
-  desc "builds and trains the network"
-  task :train do |t, args|
     network = Ocarina::Network.new(config)
 
     training_iterations = 350
@@ -41,8 +34,44 @@ namespace :ocarina do
     pbar.settings.tty.finite.template.padchar = '-'
 
     training_iterations.times do |i|
-      Ocarina::INPUT_SET.each do |letter|
-        network.train reference_image_for_char(letter), letter
+      reference_image_hash.each_pair do |char, tile|
+        network.train tile, char
+        pbar.show(msg: "current error: #{'%.10f' % network.current_error}", done: i + 1, total: training_iterations)
+      end
+    end
+
+    puts "\nfinal training error: #{network.current_error}\n"
+
+    file = "#{Ocarina::DATA_DIR}/train.bin"
+    network.save_network_to_file file
+
+    puts "trained network saved to: #{file}"
+
+    puts "##### testing against reference images #####"
+    stats = Ocarina::ErrorStats.new(config)
+
+    reference_image_hash.each_pair do |char, tile|
+      result = network.recognize tile
+      stats.check_error char.ord, result
+    end
+    stats.report
+
+  end
+
+  desc "builds and trains the network"
+  task :train do |t, args|
+    network = Ocarina::Network.new(config)
+
+    generator = Ocarina::BitmapGenerator.new(config)
+
+    training_iterations = 100
+    pbar = PowerBar.new
+    pbar.settings.tty.finite.template.barchar = '#'
+    pbar.settings.tty.finite.template.padchar = '-'
+
+    training_iterations.times do |i|
+      generator.reference_image_hash.each_pair do |char, tile|
+        network.train tile, char
         pbar.show(msg: "current error: #{'%.10f' % network.current_error}", done: i + 1, total: training_iterations)
       end
     end
@@ -61,14 +90,14 @@ namespace :ocarina do
   task :eval do |t, args|
     file = "#{Ocarina::DATA_DIR}/train.bin"
     network = Ocarina::Network.load_network_from_file file
-
+    generator = Ocarina::BitmapGenerator.new(config)
 
     puts "##### testing against reference images #####"
     stats = Ocarina::ErrorStats.new(config)
 
-    Ocarina::INPUT_SET.each do |letter|
-      result = network.recognize reference_image_for_char(letter)
-      stats.check_error letter.ord, result
+    generator.reference_image_hash.each_pair do |char, tile|
+      result = network.recognize tile
+      stats.check_error char.ord, result
     end
     stats.report
 
@@ -77,21 +106,18 @@ namespace :ocarina do
 
     stats = Ocarina::ErrorStats.new(config)
 
-    Ocarina::INPUT_SET.each do |letter|
-      result = network.recognize noise_image_for_char(letter)
-      stats.check_error letter.ord, result
+    generator.noise_image_hash.each_pair do |char, tile|
+      result = network.recognize tile
+      stats.check_error char.ord, result
     end
     stats.report
   end
 
   desc "prints letters from a letterpress game board"
   task :gameboard, [:board_file]  do |t, args|
-
-
     file = "#{Ocarina::DATA_DIR}/train.bin"
     network = Ocarina::Network.load_network_from_file file
 
-    puts "cwd: #{Dir.pwd}"
     puts "reading letterpress board: #{args.board_file}..."
 
     board = Magick::Image.read(args.board_file).first

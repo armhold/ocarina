@@ -7,8 +7,26 @@ module Ocarina
   class BitmapGenerator
     include Ocarina::Util
 
+    attr_accessor :reference_image_hash, :noise_image_hash
+
     def initialize(config)
       @config = config
+
+      # generate reference images
+      #
+      @reference_image_hash = { }
+
+      @config.char_set.each_char do |char|
+        @reference_image_hash[char] = generate_reference_gif_for_char char
+      end
+
+      # generate noise images
+      #
+      @noise_image_hash = { }
+
+      @config.char_set.each_char do |char|
+        @noise_image_hash[char] = generate_noise_gif_for_char char
+      end
     end
 
 
@@ -37,27 +55,35 @@ module Ocarina
     def generate_reference_gif_for_char(char)
       image = draw_image_for_char char
       image.write(filename_for_training_image(char, 'gif'))
+
+      image
     end
 
     # generate the gif image for the given character, but with added noise
     #
     def generate_noise_gif_for_char(char)
-      image = Magick::Image.read(filename_for_training_image(char, 'gif')).first
+      image = @reference_image_hash[char]
+
       #image = image.wave(10, 100)
       image = image.add_noise(Magick::PoissonNoise)
       #image = image.rotate(5)
-      #image = image.resize_to_fit(Ocarina::IMAGE_WIDTH, Ocarina::IMAGE_HEIGHT)
+      #image = image.resize_to_fit(@config.char_width, @config.char_height)
       image.write(filename_for_noise_image(char, 'gif'))
+
+      image
     end
 
-    # generate reference images from letterpress game boards
+    # create and return reference images from letterpress game boards.
+    # returns tiles as a hash of char -> image
     #
     def generate_from_letterpress_images
 
       # board games were generated randomly by the game.
       # with these three game boards, we have the letters A-Z.
 
-      write_letterpress_tiles("#{IMAGES_DIR}/letterpress/board1.png",
+      result = { }
+
+      result.merge! create_letterpress_tiles("#{IMAGES_DIR}/letterpress/board1.png",
                               [
                                   [ 'P', 'R', 'B', 'R', 'Z' ],
                                   [ 'T', 'A', 'V', 'Z', 'R' ],
@@ -66,7 +92,7 @@ module Ocarina
                                   [ 'R', 'Y', 'S', 'J', 'V' ]
                               ])
 
-      write_letterpress_tiles("#{IMAGES_DIR}/letterpress/board2.png",
+      result.merge! create_letterpress_tiles("#{IMAGES_DIR}/letterpress/board2.png",
                               [
                                   [ 'Q', 'D', 'F', 'P', 'M' ],
                                   [ 'N', 'E', 'E', 'S', 'I' ],
@@ -75,7 +101,7 @@ module Ocarina
                                   [ 'K', 'C', 'S', 'S', 'Y' ]
                               ])
 
-      write_letterpress_tiles("#{IMAGES_DIR}/letterpress/board3.png",
+      result.merge! create_letterpress_tiles("#{IMAGES_DIR}/letterpress/board3.png",
                               [
                                   [ 'L', 'H', 'F', 'L', 'M' ],
                                   [ 'R', 'V', 'P', 'U', 'K' ],
@@ -83,16 +109,26 @@ module Ocarina
                                   [ 'I', 'N', 'R', 'I', 'T' ],
                                   [ 'V', 'N', 'S', 'I', 'Q' ]
                               ])
+
+      result
     end
 
-    def write_letterpress_tiles(input_file, character_map)
+
+    # create character files from the given letterpress board image
+    # returns tiles as a hash
+    #
+    def create_letterpress_tiles(input_file, character_map)
       board = Magick::Image.read(input_file).first
 
       cropper = LetterpressCropper.new(@config)
       tile_rows = cropper.crop board
+
+      result = { }
       tile_rows.zip(character_map) do |tile_row, char_row|
-        tile_row.zip(char_row) { |tile, char| tile.write(filename_for_training_image(char, 'gif')) }
+        tile_row.zip(char_row) { |tile, char| result[char] = tile }
       end
+
+      result
     end
 
   end

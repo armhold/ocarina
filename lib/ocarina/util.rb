@@ -2,8 +2,8 @@ require 'RMagick'
 
 module Ocarina
 
-  CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  INPUT_SET = CHARS.split(//).shuffle
+  #CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  #INPUT_SET = CHARS.split(//).shuffle
   # network has trouble when input set grows beyond 15-18 chars
   # for now, just use a subset
   #INPUT_SET = CHARS[0..15].split(//).shuffle

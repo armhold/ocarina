@@ -6,8 +6,8 @@ module Ocarina
   #
   class ErrorStats
 
-    def initialize(num_outputs)
-      @num_outputs = num_outputs
+    def initialize(config)
+      @num_outputs = config.num_outputs
 
       @chars_seen  = 0
       @chars_wrong = 0
