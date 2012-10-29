@@ -2,16 +2,13 @@ require 'RMagick'
 
 module Ocarina
 
-  NUM_OUTPUTS  = 8 # need 8 bits to represent 0..255 in binary
-  #IMAGE_WIDTH  = 16
-  #IMAGE_HEIGHT = 16
   DATA_DIR     = "#{File.dirname(__FILE__)}/../../data"
   IMAGES_DIR   = "#{DATA_DIR}/images"
 
   module Util
 
     def int_to_binary_string(i)
-      i.to_s(2).rjust(NUM_OUTPUTS, '0')
+      i.to_s(2).rjust(config.num_outputs, '0')
     end
 
     def char_to_binary_string(target_char)

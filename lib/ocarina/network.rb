@@ -70,7 +70,7 @@ module Ocarina
     def train(image, target_char)
       # quantize to two-color
       image = quantize_image(image)
-      image.write(filename_for_quantized_image(target_char, 'gif'))
+      #image.write(filename_for_quantized_image(target_char, 'gif'))
 
       # the binary string we expect to see from the output nodes
       @target_binary_string = char_to_binary_string(target_char)
@@ -149,9 +149,9 @@ module Ocarina
 
         @output_weights[hidden] = [ ]
 
-        NUM_OUTPUTS.times do |output|
+        config.num_outputs.times do |output|
           # we want the overall sum of weights to be < 1
-          weight = rand(0.8..0.9) / (@hidden_count * NUM_OUTPUTS)
+          weight = rand(0.8..0.9) / (@hidden_count * config.num_outputs)
           @output_weights[hidden][output] = weight
         end
 
@@ -182,7 +182,7 @@ module Ocarina
 
     def calculate_final_outputs
 
-      NUM_OUTPUTS.times do |output|
+      config.num_outputs.times do |output|
         sum = 0
 
         @hidden_count.times do |hidden|
@@ -199,7 +199,7 @@ module Ocarina
     def calculate_output_errors
       accum_error = 0
 
-      NUM_OUTPUTS.times do |output|
+      config.num_outputs.times do |output|
         expected = @target_binary_string[output].to_i
         error = (expected - @output_values[output]) * (1.0 - @output_values[output]) * @output_values[output]
 
@@ -220,7 +220,7 @@ module Ocarina
     def calculate_hidden_errors
       @hidden_count.times do |hidden|
         sum = 0
-        NUM_OUTPUTS.times do |output|
+        config.num_outputs.times do |output|
           sum += (@output_errors[output] * @output_weights[hidden][output])
         end
 
@@ -233,7 +233,7 @@ module Ocarina
 
     def adjust_output_weights
       @hidden_count.times do |hidden|
-        NUM_OUTPUTS.times do |output|
+        config.num_outputs.times do |output|
           @output_weights[hidden][output] += (@output_errors[output] * @hidden_outputs[hidden])
         end
       end

@@ -75,6 +75,8 @@ namespace :ocarina do
 
   desc "builds and trains network using Letterpress board tiles"
   task :letterpress do |t, args|
+    #@config = Ocarina::Config.new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 8, 16, 16)
+
     generator = Ocarina::BitmapGenerator.new(config)
     reference_image_hash = generator.generate_from_letterpress_images
 
@@ -136,6 +138,7 @@ namespace :ocarina do
   end
 
   def config
+    # need 8 bits to represent 0..255 in binary
     @config ||= Ocarina::Config.new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 8, 16, 16)
   end
 

@@ -134,7 +134,11 @@ module Ocarina
 
       result = { }
       tile_rows.zip(character_map) do |tile_row, char_row|
-        tile_row.zip(char_row) { |tile, char| result[char] = tile }
+        tile_row.zip(char_row) do |tile, char|
+          result[char] = tile
+
+          #puts "tile: #{tile.rows} x #{tile.columns}"
+        end
       end
 
       result
