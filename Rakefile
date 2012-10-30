@@ -14,7 +14,7 @@ namespace :ocarina do
     #
     # images are saved to data/images/{reference,noise}
 
-    generator = Ocarina::BitmapGenerator.new(config)
+    generator = Ocarina::CharacterGenerator.new(config)
     generator.persist_tiles
   end
 
@@ -22,7 +22,7 @@ namespace :ocarina do
   task :train do |t, args|
     network = Ocarina::Network.new(config)
 
-    generator = Ocarina::BitmapGenerator.new(config)
+    generator = Ocarina::CharacterGenerator.new(config)
 
     training_iterations = 350
     pbar = PowerBar.new
@@ -50,7 +50,7 @@ namespace :ocarina do
   task :eval do |t, args|
     file = "#{Ocarina::DATA_DIR}/train.bin"
     network = Ocarina::Network.load_network_from_file file
-    generator = Ocarina::BitmapGenerator.new(config)
+    generator = Ocarina::CharacterGenerator.new(config)
 
     puts "##### testing against reference images #####"
     stats = Ocarina::ErrorStats.new(config)
@@ -75,20 +75,16 @@ namespace :ocarina do
 
   desc "builds and trains network using Letterpress board tiles"
   task :letterpress do |t, args|
-    #@config = Ocarina::Config.new("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 8, 16, 16)
-
-    generator = Ocarina::BitmapGenerator.new(config)
-    reference_image_hash = generator.generate_from_letterpress_images
-
+    generator = Ocarina::LetterpressCharacterGenerator.new(config)
     network = Ocarina::Network.new(config)
 
-    training_iterations = 350
+    training_iterations = 500
     pbar = PowerBar.new
     pbar.settings.tty.finite.template.barchar = '#'
     pbar.settings.tty.finite.template.padchar = '-'
 
     training_iterations.times do |i|
-      reference_image_hash.each_pair do |char, tile|
+      generator.reference_image_hash.each_pair do |char, tile|
         network.train tile, char
         pbar.show(msg: "current error: #{'%.10f' % network.current_error}", done: i + 1, total: training_iterations)
       end
@@ -104,7 +100,7 @@ namespace :ocarina do
     puts "##### testing against reference images #####"
     stats = Ocarina::ErrorStats.new(config)
 
-    reference_image_hash.each_pair do |char, tile|
+    generator.reference_image_hash.each_pair do |char, tile|
       result = network.recognize tile
       stats.check_error char.ord, result
     end
