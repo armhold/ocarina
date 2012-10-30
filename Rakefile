@@ -2,6 +2,14 @@
 require "bundler/gem_tasks"
 require_relative "lib/ocarina.rb"
 require 'powerbar'
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+end
+
+desc "Run tests"
+task :default => :test
 
 namespace :ocarina do
   include Ocarina::Util
@@ -92,7 +100,7 @@ namespace :ocarina do
 
     puts "\nfinal training error: #{network.current_error}\n"
 
-    file = "#{Ocarina::DATA_DIR}/train.bin"
+    file = "#{Ocarina::DATA_DIR}/letterpress-train.bin"
     network.save_network_to_file file
 
     puts "trained network saved to: #{file}"
@@ -110,7 +118,7 @@ namespace :ocarina do
 
   desc "deciphers letters from a letterpress game board"
   task :gameboard, [:board_file]  do |t, args|
-    file = "#{Ocarina::DATA_DIR}/train.bin"
+    file = "#{Ocarina::DATA_DIR}/letterpress-train.bin"
     network = Ocarina::Network.load_network_from_file file
 
     puts "reading letterpress board: #{args.board_file}..."
@@ -118,19 +126,18 @@ namespace :ocarina do
     board = Magick::Image.read(args.board_file).first
 
     cropper = Ocarina::LetterpressCropper.new(config)
-    tile_rows = cropper.crop board
-
+    chars = cropper.decipher_board(network, board)
     result = ""
 
-    tile_rows.each do |tile_row|
-      tile_row.each do |tile|
-        result << "\t#{network.recognize(tile).chr}"
+    chars.each do |row|
+      row.each do |char|
+        result << "  #{char}"
       end
 
       result << "\n"
     end
 
-    puts "result: \n#{result}"
+    puts "result: \n\n#{result}"
   end
 
   def config

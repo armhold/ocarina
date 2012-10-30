@@ -18,6 +18,27 @@ module Ocarina
       @config = config
     end
 
+    # crops the board into tiles, runs recognizer on each of the tiles,
+    # and returns resulting array of array of chars
+    #
+    def decipher_board(network, board_image)
+      tile_rows = crop board_image
+
+      result = [ ]
+
+      tile_rows.each do |tile_row|
+        row = [ ]
+        tile_row.each do |tile|
+          row << network.recognize(tile).chr
+        end
+
+        result << row
+      end
+
+      result
+    end
+
+
     # returns an N by N array of image tiles
     #
     def crop(image)
