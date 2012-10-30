@@ -2,17 +2,21 @@
 
 ### A Ruby project that uses machine learning to perform Optical Character Recognition.
 
-I created this project in order to more fully learn Ruby. As such, it's mostly a kind of toy program
-for didactic purposes. It works, but it's not really intended to be a production-level OCR package.
+I created this project in order to learn Ruby. It started as kind of a toy program, but
+quickly grew into something with a practical purpose (decoding [Letterpress](https://itunes.apple.com/us/app/id526619424?mt=8)
+gameboards!)
+
+It works fairly well on constrained input, but it's not really intended to be a
+production-level OCR package.
 
 ## Status
 
-Ocarina successfully trains and recognizes a small set (15-20) of characters. Once trained, the network
-accurately recognizes its training set (100%) and fairly accurately (98%?) recognizes characters
+Ocarina successfully trains and recognizes the 26 letters of the alphabet. Once trained, the network
+accurately recognizes its training set (100%) and also does well (98%?) on recognizing characters
 with added noise.
 
-I'm still working on how best to organize the neural network (# of hidden nodes, # of outputs, edge weights) to
-increase the set size to support the full ASCII (and beyond) alphabet.
+I'm still working on how best to organize the neural network (# of hidden nodes, # of outputs,
+edge weights) to increase the set size to support the full ASCII (and beyond) alphabet.
 
 
 ## Motivation

@@ -78,7 +78,7 @@ namespace :ocarina do
     generator = Ocarina::LetterpressCharacterGenerator.new(config)
     network = Ocarina::Network.new(config)
 
-    training_iterations = 500
+    training_iterations = 1000
     pbar = PowerBar.new
     pbar.settings.tty.finite.template.barchar = '#'
     pbar.settings.tty.finite.template.padchar = '-'

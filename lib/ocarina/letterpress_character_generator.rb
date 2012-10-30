@@ -2,7 +2,11 @@ require 'RMagick'
 
 module Ocarina
 
-  # creates bitmap images for characters using RMagick's drawing canvas
+  # creates bitmap images for characters using letterpress board game images
+  #
+  # We create the reference character images by cropping game board tiles for
+  # three boards for which the letters are known ahead of time. Together, the three
+  # boards provide images for all the letters of the alphabet.
   #
   class LetterpressCharacterGenerator < CharacterGenerator
 
@@ -78,8 +82,6 @@ module Ocarina
       tile_rows.zip(character_map) do |tile_row, char_row|
         tile_row.zip(char_row) do |tile, char|
           result[char] = tile
-
-          #puts "tile: #{tile.rows} x #{tile.columns}"
         end
       end
 
