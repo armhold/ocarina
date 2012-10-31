@@ -4,9 +4,9 @@ require File.expand_path('../lib/ocarina/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["George Armhold"]
   gem.email         = ["armhold@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{A Ruby project that uses machine learning to perform Optical Character Recognition}
+  gem.summary       = %q{A Ruby project that uses machine learning to perform Optical Character Recognition}
+  gem.homepage      = "https://github.com/armhold/ocarina"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
