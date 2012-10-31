@@ -2,6 +2,8 @@
 
 ### A Ruby project that uses machine learning to perform Optical Character Recognition.
 
+![](https://raw.github.com/armhold/ocarina/master/ocarina.png)
+
 I created this project in order to learn Ruby. It started as kind of a toy program, but
 quickly grew into something with a practical purpose (decoding [Letterpress](https://itunes.apple.com/us/app/id526619424?mt=8)
 gameboards!)
