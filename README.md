@@ -5,7 +5,7 @@
 ![](https://raw.github.com/armhold/ocarina/master/ocarina.png)
 
 I created this project in order to learn Ruby. It started as kind of a toy program, but
-quickly grew into something with a practical purpose (decoding [Letterpress](https://itunes.apple.com/us/app/id526619424?mt=8)
+quickly grew into something with a practical purpose (decoding [Letterpress](https://wordhelper.net)
 gameboards!)
 
 It works fairly well on constrained input, but it's not really intended to be a
@@ -44,6 +44,15 @@ On OSX at least, ImageMagick requires X11 and ghostscript. You'll likely need to
 1. Download and install [X11Quartz](http://xquartz.macosforge.org/landing)
 1. `$ brew install imagemagick`
 1. `$ brew install ghostscript`
+
+For Linux (I'm on Centos 5.8) I had to build ImageMagick 6.8 from source, install it,
+install the source into /usr/local/src/ImageMagick-6.8.0-4/magick and then run:
+
+1. export PKG_CONFIG_PATH=/usr/local/src/ImageMagick-6.8.0-4/magick/
+1. add /usr/local/lib to the system LD_LIBRARY_PATH
+1. gem install rmagick
+
+
 
 
 ## Usage
