@@ -5,7 +5,7 @@
 ![](https://raw.github.com/armhold/ocarina/master/ocarina.png)
 
 I created this project in order to learn Ruby. It started as kind of a toy program, but
-quickly grew into something with a practical purpose (decoding [Letterpress](https://wordhelper.net)
+quickly grew into something with a practical purpose (decoding [Letterpress](http://wordhelper.net)
 gameboards!)
 
 It works fairly well on constrained input, but it's not really intended to be a
