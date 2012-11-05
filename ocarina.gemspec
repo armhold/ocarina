@@ -17,4 +17,5 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'rmagick'
   gem.add_runtime_dependency 'powerbar'
+  gem.add_development_dependency 'ruby-prof'
 end

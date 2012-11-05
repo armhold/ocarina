@@ -1,5 +1,6 @@
 require 'test/unit'
 require 'ocarina'
+require_relative '../lib/ocarina/development_profiler.rb'
 
 class LetterpressTest < Test::Unit::TestCase
 
@@ -52,9 +53,29 @@ class LetterpressTest < Test::Unit::TestCase
                  ], @cropper.decipher_board(@network, read_board("board5.png"))
   end
 
+
+  # run with:
+  # $ ruby -I"lib:test" test/test_letterpress.rb -n test_performance
+  #
+  def test_performance
+
+    Ocarina::DevelopmentProfiler::prof("stuff") do
+      @cropper.decipher_board(@network, read_board("board5.png"))
+    end
+
+  end
+
   def read_board(file)
     Magick::Image.read("#{Ocarina::DATA_DIR}/images/letterpress/#{file}").first
   end
 
+  def realtime(msg) # :yield:
+    r0 = Time.now
+    yield
+    result = Time.now - r0
+
+    puts "#{msg} took: #{result}"
+    result
+  end
 
 end
