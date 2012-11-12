@@ -56,19 +56,17 @@ install the source into /usr/local/src/ImageMagick-6.8.0-4/magick and then run:
 
 ## Usage
 
-#### Training
-
 To train on bitmaps created with ImageMagick:
 
-`rake ocarina:train`
+1. `rake ocarina:train`
+1. `rake ocarina:eval`
 
-To train on Letterpress tiles:
+You can also train a network to recognize
 
-`rake ocarina:letterpress`
+To train a network on Letterpress tiles:
 
-#### Character Recognition
+1. `rake ocarina:letterpress`
 
-`rake ocarina:eval`
 
 ## Contributing
 
