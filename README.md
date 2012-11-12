@@ -64,6 +64,8 @@ To train on bitmaps created with ImageMagick:
 
 To train on Letterpress tiles:
 
+`rake ocarina:letterpress`
+
 #### Character Recognition
 
 `rake ocarina:eval`
