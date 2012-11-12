@@ -14,8 +14,7 @@ production-level OCR package.
 ## Status
 
 Ocarina successfully trains and recognizes the 26 letters of the alphabet. Once trained, the network
-accurately recognizes its training set (100%) and also does well (98%?) on recognizing characters
-with added noise.
+accurately recognizes its training set and also recognizes characters with added noise.
 
 I'm still working on how best to organize the neural network (# of hidden nodes, # of outputs,
 edge weights) to increase the set size to support the full ASCII (and beyond) alphabet.
@@ -59,7 +58,11 @@ install the source into /usr/local/src/ImageMagick-6.8.0-4/magick and then run:
 
 #### Training
 
+To train on bitmaps created with ImageMagick:
+
 `rake ocarina:train`
+
+To train on Letterpress tiles:
 
 #### Character Recognition
 

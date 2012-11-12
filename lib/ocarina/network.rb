@@ -75,15 +75,16 @@ module Ocarina
       # the binary string we expect to see from the output nodes
       @target_binary_string = char_to_binary_string(target_char)
 
+      # feed the image data forward through the network to obtain a result
+      #
       assign_inputs image
-
       calculate_hidden_outputs
       calculate_final_outputs
+
+      # propagate the error correction backward through the net
+      #
       calculate_output_errors
       calculate_hidden_errors
-
-      # process results
-      #
       adjust_output_weights
       adjust_input_weights
     end
