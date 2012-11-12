@@ -41,15 +41,15 @@ On OSX at least, ImageMagick requires X11 and ghostscript. You'll likely need to
 
 
 1. Download and install [X11Quartz](http://xquartz.macosforge.org/landing)
-1. `$ brew install imagemagick`
-1. `$ brew install ghostscript`
+1. `brew install imagemagick`
+1. `brew install ghostscript`
 
 For Linux (I'm on Centos 5.8) I had to build ImageMagick 6.8 from source, install it,
 install the source into /usr/local/src/ImageMagick-6.8.0-4/magick and then run:
 
-1. export PKG_CONFIG_PATH=/usr/local/src/ImageMagick-6.8.0-4/magick/
-1. add /usr/local/lib to the system LD_LIBRARY_PATH
-1. gem install rmagick
+1. `export PKG_CONFIG_PATH=/usr/local/src/ImageMagick-6.8.0-4/magick/`
+1. `add /usr/local/lib to the system LD_LIBRARY_PATH`
+1. `gem install rmagick`
 
 
 
@@ -58,14 +58,12 @@ install the source into /usr/local/src/ImageMagick-6.8.0-4/magick and then run:
 
 To train on bitmaps created with ImageMagick:
 
-1. `rake ocarina:train`
-1. `rake ocarina:eval`
+* `rake ocarina:train`
+* `rake ocarina:eval`
 
-You can also train a network to recognize
+You can also train a network to recognize Letterpress tiles:
 
-To train a network on Letterpress tiles:
-
-1. `rake ocarina:letterpress`
+* `rake ocarina:letterpress`
 
 
 ## Contributing
