@@ -4,7 +4,7 @@
 
 ![](https://raw.github.com/armhold/ocarina/master/ocarina.png)
 
-I created this project in order to learn Ruby. It started as kind of a toy program, but
+I created this project to learn Ruby beyond what you need for Rails, and also just to see if I could actually create an OCR lib. It started as kind of a toy program, but
 quickly grew into something with a practical purpose (decoding [Letterpress](http://wordhelper.net)
 gameboards!)
 
